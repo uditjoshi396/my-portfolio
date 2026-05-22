@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udit-joshi-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: udit-joshi-backend
+  template:
+    metadata:
+      labels:
+        app: udit-joshi-backend
+    spec:
+      containers:
+        - name: backend
+          image: your-dockerhub/udit-joshi-backend:latest
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - secretRef:
+                name: udit-joshi-backend-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udit-joshi-backend-service
+spec:
+  selector:
+    app: udit-joshi-backend
+  ports:
+    - port: 80
+      targetPort: 5000
